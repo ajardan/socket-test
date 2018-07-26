@@ -1,0 +1,35 @@
+version: "3.4"
+services:
+  load-balancer:
+    image: traefik:1.7.0-rc2
+    command: "-c /dev/null --docker --docker.watch --docker.swarmmode --api --metrics --metrics.prometheus --respondingtimeouts.idletimeout=2s --maxidleconnsperhost=50 --forwardingtimeouts.dialtimeout=5s --forwardingtimeouts.responseheadertimeout=20s --lifecycle.requestacceptgracetimeout=5s --entryPoints='Name:http Address::80' --entryPoints='Name:https Address::443 TLS:/vagrant/site.cert,/vagrant/site.key' --entryPoints='Name:traefik Address::8083'"
+    stop_grace_period: 2m
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - "node.role == manager"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/vagrant:/vagrant:ro"
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      - target: 8083
+        published: 8083
+        protocol: tcp
+        mode: host
+  app:
+    image: jwilder/whoami
+    deploy:
+      replicas: 2
+      labels:
+        traefik.frontend.rule: "Path:/"
+        traefik.port: 8000
+        traefik.frontend.entryPoints: "http,https"
