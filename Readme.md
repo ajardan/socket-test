@@ -8,8 +8,10 @@ To run this test you will need Vagrant and VirtualBox installed:
 https://www.vagrantup.com/downloads.html
 https://www.virtualbox.org/wiki/Downloads
 
-Running the test requires just 1 command::
-    $ vagrant up
+Running the test requires just 1 command:
+```
+$ vagrant up
+```
 
 This will bring up both machines:
 
@@ -20,11 +22,12 @@ server: Has docker installed in swarm mode with 2 services
 loader: Runs a bunch of ab benchmarks on a "broken" network to simulate bad clients
 
 
-The test takes approximately 30 minutes (on a i5 Macbook Pro), and as a result there will be a number of ESTABLISHED connections to the load balancer on server machine, even though the tests are done and all "clients" are dead. Can be checked by::
+The test takes approximately 30 minutes (on a i5 Macbook Pro), and as a result there will be a number of ESTABLISHED connections to the load balancer on server machine, even though the tests are done and all "clients" are dead. Can be checked by:
+```
     $ vagrant ssh server
     $ sudo -s
     # nsenter -t `pidof traefik` -n lsof -nPitcp:443
-
+```
 Also traefik web interface can be accessed at: http://127.0.0.1:8083
 
 And the web service itself via:
