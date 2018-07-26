@@ -5,7 +5,9 @@ This set of scripts configures 2 VM's with the subnet 192.168.192.0/18, so if yo
 The certificates included are self-signed and have no value in case you want to steal these ;)
 
 To run this test you will need Vagrant and VirtualBox installed:
+
 https://www.vagrantup.com/downloads.html
+
 https://www.virtualbox.org/wiki/Downloads
 
 Running the test requires just 1 command:
